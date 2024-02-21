@@ -1,14 +1,12 @@
 use rtask;
+use std::io;
 
-fn main() {
+fn main() -> io::Result<()> {
     let mut runtime = rtask::new();
 
-    let mut tasks = vec![];
-    for i in 0..16 {
-        tasks.push(runtime.spawn(move || {
-            println!("hello from task {}", i);
-        }));
-    }
+    runtime.read::<u8>("data/test-0.dat")?
+        .map(|x| x * 2)
+        .write("tmp/test-0-out.dat")?;
 
-    runtime.waitall(tasks);
+    Ok(())
 }

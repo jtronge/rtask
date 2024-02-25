@@ -36,8 +36,8 @@ where
     }
 }
 
-pub trait RangeIdx: num::Integer + Copy + From<i32> {}
-impl<T: num::Integer + Copy + From<i32>> RangeIdx for T {}
+pub trait RangeIdx: num::Integer + Copy + From<i32> + std::fmt::Debug{}
+impl<T: num::Integer + Copy + From<i32> + std::fmt::Debug> RangeIdx for T {}
 
 /// A range that can be possibly distributed over multiple processes, nodes,
 /// etc.
@@ -96,7 +96,6 @@ impl<Idx: RangeIdx> IntoDistributedIterator for Range<Idx> {
                 end: if local_end > self.end { self.end } else { local_end },
             }
         };
-        let local_range = Range { start: 0.into(), end: 0.into() };
 
         DistributedRange {
             range: self,
